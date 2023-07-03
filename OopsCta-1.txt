@@ -1,0 +1,161 @@
+package sdmcet.cse.oop;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+class GradingSystem extends JFrame implements ActionListener {
+	JFrame f = new JFrame("Student's Grading system");
+	JButton b = new JButton("CALCULATE");
+
+	JLabel lbl1 = new JLabel("Enter IA-1 marks");
+	JTextField t1 = new JTextField(5);
+
+	JLabel lbl2 = new JLabel("Enter IA-2 marks");
+	JTextField t2 = new JTextField(5);
+
+	JLabel lbl3 = new JLabel("Enter IA-3 marks");
+	JTextField t3 = new JTextField(5);
+
+	JLabel lbl4 = new JLabel("Enter CTA marks");
+	JTextField t4 = new JTextField(5);
+
+	JLabel lbl5 = new JLabel("Enter SEE marks");
+	JTextField t5 = new JTextField(5);
+
+	JLabel lbl6 = new JLabel();
+	JLabel lbl7 = new JLabel("GRADE CALCULATOR");
+	JLabel lbl8 = new JLabel();
+
+	JPanel panel1 = new JPanel();
+	JPanel panel2 = new JPanel();
+	JPanel panel3 = new JPanel();
+	JPanel panel4 = new JPanel();
+	JPanel panel5 = new JPanel();
+	JPanel panel6 = new JPanel();
+	JPanel panel7 = new JPanel();
+	JPanel panel8 = new JPanel();
+
+	GradingSystem() {
+
+		b.addActionListener(this);
+		panel1.add(lbl7);
+
+		panel2.add(lbl1);
+		panel2.add(t1);
+
+		panel3.add(lbl2);
+		panel3.add(t2);
+
+		panel4.add(lbl3);
+		panel4.add(t3);
+
+		panel5.add(lbl4);
+		panel5.add(t4);
+
+		panel6.add(lbl5);
+		panel6.add(t5);
+
+		panel7.add(lbl6);
+		panel7.add(lbl8);
+		panel8.add(b);
+
+		f.add(panel1);
+		f.add(panel2);
+		f.add(panel3);
+		f.add(panel4);
+		f.add(panel5);
+		f.add(panel6);
+		f.add(panel8);
+		f.add(panel7);
+
+		f.setLayout(new GridLayout(10, 0));
+		f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		f.setBounds(400, 200, 500, 400);
+		f.setVisible(true);
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		try {
+
+			int cie;
+			char grade;
+
+			// Read Input Marks
+			int ia1 = Integer.parseInt(t1.getText());
+			int ia2 = Integer.parseInt(t2.getText());
+			int ia3 = Integer.parseInt(t3.getText());
+			int cta = Integer.parseInt(t4.getText());
+			int see = Integer.parseInt(t5.getText());
+
+			if (ia1 < 0 || ia1 > 20 || ia2 < 0 || ia2 > 20 || ia3 < 0 || ia3 > 20 || cta < 0 || cta > 10 || see < 0
+					|| see > 100)
+				throw new IllegalArgumentException("Invalid Marks Entered");
+
+			// Computation of CIE Marks
+			if (ia1 >= ia2 && ia3 >= ia2)
+				cie = ia1 + ia3 + cta;
+			else if (ia1 >= ia3 && ia2 >= ia3)
+				cie = ia1 + ia2 + cta;
+			else
+				cie = ia2 + ia3 + cta;
+
+			if (cie < 20) {
+				lbl6.setText("Student is detained from taking SEE exam");
+				lbl8.setText("");
+				return;
+			}
+
+			if (see == 38 || see == 39)
+				see = 40;
+
+			if (see < 38) {
+				lbl6.setText("Student FAILED ");
+				lbl8.setText("	Grade : F");
+				return;
+			}
+
+			// Computation of Total Marks
+			double x = cie + see / 2.0;
+			double total = Math.round(x);
+
+			// Grade Calculation
+			if (total >= 90)
+				grade = 'S';
+			else if (total >= 80)
+				grade = 'A';
+			else if (total >= 70)
+				grade = 'B';
+			else if (total >= 60)
+				grade = 'C';
+			else if (total >= 50)
+				grade = 'D';
+			else if (total >= 40)
+				grade = 'E';
+			else
+				grade = 'F';
+
+			// Display Output
+			lbl6.setText("TOTAL MARKS :  " + total);
+			lbl8.setText("GRADE :  " + grade);
+
+		} catch (NumberFormatException nfe) {
+			lbl6.setText("Invalid Marks Entered");
+			lbl8.setText("");
+		} catch (IllegalArgumentException iae) {
+			lbl6.setText(iae.getMessage());
+			lbl8.setText("");
+		}
+	}
+}
+
+public class GradingSystemDemo {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		JFrame f = new GradingSystem();
+
+	}
+}
